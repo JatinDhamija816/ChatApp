@@ -1,23 +1,44 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-
+import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 const Register = () => {
-    const [inputs, setInputs] = useState({ name: '', email: '', password: '', image: '' })
+    const navigate = useNavigate()
+    const [name, setName] = useState('')
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [image, setImage] = useState('')
+    const [error, setError] = useState('')
 
-    const HandleChange = (e) => {
-        setInputs(prevState => ({
-            ...prevState, [e.target.name]: e.target.value
-        }))
-    }
-    const HandleRegister = (e) => {
+    const HandleRegister = async (e) => {
         e.preventDefault()
-        console.log(inputs)
+        try {
+            if (!name || !email || !password) {
+                setError('Please fill all details')
+                return
+            }
+            if (password.length < 6) {
+                setError('Password Length must be greater than 6')
+                return
+            }
+            const { data } = await axios.post('http://localhost:8000/api/user/register', { name, email, password, image })
+            navigate('/')
+            setName('')
+            setEmail('')
+            setPassword('')
+            setImage('')
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     return (
-        <div className='w-1/3 bg-slate-300 min-h-60 mt-10 drop-shadow-xl rounded-2xl mx-auto' >
+        <div className='w-1/3 bg-slate-400 min-h-60 drop-shadow-xl rounded-2xl mx-auto' >
             <div className='pt-5'>
                 <h1 className='text-center text-2xl font-bold'>Register</h1>
+                {
+                    error && <p className='text-red-700 text-center mt-2 '>{error}</p>
+                }
             </div>
             <div>
                 <form action="">
@@ -27,7 +48,7 @@ const Register = () => {
                                 <label className='ml-1 font-semibold '>Name</label>
                             </div>
                             <div>
-                                <input type="text" required className='w-full border-none outline-none rounded-lg px-2 p-1' placeholder='Enter Your Name' name='name' onChange={HandleChange} value={inputs.name} />
+                                <input type="text" required className='w-full border-none outline-none rounded-lg px-2 p-1' placeholder='Enter Your Name' onChange={(e) => setName(e.target.value)} value={name} />
                             </div>
                         </div>
                         <div className='m-5'>
@@ -35,7 +56,7 @@ const Register = () => {
                                 <label className='ml-1 font-semibold '>Email</label>
                             </div>
                             <div>
-                                <input type="text" required className='w-full border-none outline-none rounded-lg px-2 p-1' placeholder='Enter Your Email' name='email' value={inputs.email} onChange={HandleChange} />
+                                <input type="text" required className='w-full border-none outline-none rounded-lg px-2 p-1' placeholder='Enter Your Email' onChange={(e) => setEmail(e.target.value)} value={email} />
                             </div>
                         </div>
                         <div className='m-5'>
@@ -43,7 +64,7 @@ const Register = () => {
                                 <label className='ml-1 font-semibold '>Password</label>
                             </div>
                             <div>
-                                <input type="password" required className='w-full border-none outline-none rounded-lg px-2 p-1' placeholder='Enter Password' name='password' value={inputs.password} onChange={HandleChange} />
+                                <input type="password" required className='w-full border-none outline-none rounded-lg px-2 p-1' placeholder='Enter Password' onChange={(e) => setPassword(e.target.value)} value={password} />
                             </div>
                         </div>
                         <div className='m-5'>
@@ -51,9 +72,7 @@ const Register = () => {
                                 <label className='ml-1 font-semibold '>Image</label>
                             </div>
                             <div>
-                                <input type="file" required className='w-full border-none outline-none rounded-lg p-1' name='image' value={inputs.image} onChange={(e) => setInputs(prevState => ({
-                                    ...prevState, [e.target.name]: e.target.value
-                                }))} />
+                                <input type="file" required className='w-full border-none outline-none rounded-lg p-1' name='image' onChange={(e) => setImage(e.target.value)} value={image} />
                             </div>
                         </div>
                         <div className='m-5 justify-center flex'>

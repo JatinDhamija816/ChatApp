@@ -13,7 +13,7 @@ const Login = () => {
         console.log(inputs)
     }
     return (
-        <div className='w-1/3 bg-slate-300 min-h-60 mt-10 drop-shadow-xl rounded-2xl mx-auto' >
+        <div className='w-1/3 bg-slate-300 min-h-60 drop-shadow-xl rounded-2xl mx-auto' >
             <div className='pt-5'>
                 <h1 className='text-center text-2xl font-bold'>Login</h1>
             </div>

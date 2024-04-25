@@ -5,12 +5,14 @@ import Register from './components/Register'
 
 const App = () => {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path='/' element={<Login />} />
-        <Route path='/register' element={<Register />} />
-      </Routes>
-    </BrowserRouter>
+    <div className='bg-zinc-700 h-screen'>
+      <BrowserRouter>
+        <Routes>
+          <Route path='/' element={<Login />} />
+          <Route path='/register' element={<Register />} />
+        </Routes>
+      </BrowserRouter>
+    </div>
   )
 }
 
